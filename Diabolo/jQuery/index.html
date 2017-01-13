@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div>
+            <input id="JSONfile" type="text" value="https://raw.githubusercontent.com/substack/node-browserify/master/package.json" />
+            <input id="loadJSON" type="button" value="Load" />
+        </div>
+        <div>
+            <table border="2" id="displayArray">
+                <tr>
+                    <th>Key</th>
+                    <th>Preview</th>
+                    <th>Type</th>
+                </tr>
+            </table>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#displayArray").hide();
+            $("#loadJSON").click(function() {
+                $.getJSON($("#JSONfile").val(), function(data) {
+                    // first put the JSON object in an array in order to sort it
+                    var keys =[];
+                    for (var prop in data) {
+                        keys.push(prop);
+                    }
+                    keys.sort();
+                    // then parse the first 10 items
+                    for (var i = 0; i < 10; i++) {
+                        var key = keys[i];
+                        var val = data[key];
+                        // create new row
+                        var newRow = document.createElement("tr");
+                        var newKeyCell, newPreviewCell, newTypeCell;
+                        // add Key, Preview & Type cells
+                        newRow.appendChild(newKeyCell = document.createElement("th"));
+                        newRow.appendChild(newPreviewCell = document.createElement("td"));
+                        newRow.appendChild(newTypeCell = document.createElement("td"));
+                        // fill the cells
+                        newKeyCell.innerHTML = key;
+                        if ($.isArray(val)) {
+                            newPreviewCell.innerHTML = val.length;
+                            newTypeCell.innerHTML = "Array";
+                        }
+                        else if ($.isPlainObject(val)) {
+                            newPreviewCell.innerHTML = Object.keys(val).length;
+                            newTypeCell.innerHTML = "Object";
+                        }
+                        else {
+                            newPreviewCell.innerHTML = val.substring(0, 10);
+                            newTypeCell.innerHTML = "String";
+                        }
+                        // add the row to the table
+                        $("#displayArray").append(newRow);
+                        $("#displayArray").show();
+                    }
+                });
+            });
+        });
+    </script>
+</html>
