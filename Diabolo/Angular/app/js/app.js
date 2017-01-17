@@ -9,9 +9,9 @@ function setNumberToFind() {
   console.debug("Shhh, don't tell that %s is the number to find!", numberToFind);
 }
 
-var app = angular.module('GuessTheNumber', []);
+var appGTN = angular.module('GuessTheNumber', []);
 
-app.controller("GuessController", function($scope) {
+appGTN.controller("GuessController", function($scope) {
   $scope.checkInput = function() {
     if (numberOfTries == 0) {
       gameStartedTick = new Date();
@@ -30,29 +30,23 @@ app.controller("GuessController", function($scope) {
         result = "too high";
       }
       else {
+        result = "out of range";
         console.error("Guess validity not implemented!");
       }
       $scope.GuessResult = "Sorry, your guess is " + result + ".";
       var guessToRemember = $scope.GuessInput + " - "+ result;
-      if ($scope.previousGuesses.indexOf(guessToRemember) == -1) {
-        $scope.previousGuesses.unshift(guessToRemember);
-      }
-      $scope.previousGuesses2.unshift({ 'value': $scope.GuessInput, 'error': result });
-      // console.debug($scope.previousGuesses2);
+      $scope.previousGuesses.unshift({ 'value': $scope.GuessInput, 'error': result });
     }
   }
   $scope.previousGuesses = [];
-  $scope.previousGuesses2 = [];
 });
 
-app.directive("previousGuesses", function() {
+appGTN.directive("myGuessDisplay", function() {
   return {
-    template: '<ul> <li ng-repeat="p in previousGuesses"> {{ p }}'
-  }
-});
-
-app.directive("myGuessDisplay", function() {
-  return {
-    templateUrl: 'guess.html'
+    scope: {
+      myGuessDisplay: '='
+    },
+    replace: false,
+    templateUrl: 'html/guess.html'
   }
 });
