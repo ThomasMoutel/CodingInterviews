@@ -15,7 +15,14 @@
       <label ng-bind="GuessResult"></label>
     </form>
     <!-- display previous failed guesses here -->
-    <div previous-guesses></div>
+    <!--<div previous-guesses>-->
+    <div>
+			<table>
+				<tr ng-repeat="guess in previousGuesses2 | limitTo: 5 | orderBy:'created':true">
+          <my-guess-display guess="guess"></my-guess-display>
+				</tr>
+			</table>
+    </div>
   </div>
 
   <script src="bower_components/angular/angular.js"></script>
